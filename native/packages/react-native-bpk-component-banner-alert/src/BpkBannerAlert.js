@@ -173,6 +173,7 @@ const BpkBannerAlert = (props) => {
     animateOnEnter,
     animateOnLeave,
     children,
+    bannerStyle,
     ...rest
   } = props;
 
@@ -208,44 +209,47 @@ const BpkBannerAlert = (props) => {
     <AnimateAndFade
       animateOnEnter={animateOnEnter}
       animateOnLeave={dismissable || animateOnLeave}
-      style={outerStyle}
       show={show}
       {...rest}
     >
       <View
-        style={outerStyle}
+        style={bannerStyle}
       >
-        <View style={styles.bannerContainer} >
-          {expandable ? (
-            <BpkTouchableOverlay
-              accessibilityComponentType="button"
-              onPress={onToggleExpanded}
-              accessibilityLabel={toggleExpandedButtonLabel}
-              style={styles.bannerContainer}
-            >
-              {banner}
-            </BpkTouchableOverlay>
+        <View
+          style={outerStyle}
+        >
+          <View style={styles.bannerContainer} >
+            {expandable ? (
+              <BpkTouchableOverlay
+                accessibilityComponentType="button"
+                onPress={onToggleExpanded}
+                accessibilityLabel={toggleExpandedButtonLabel}
+                style={styles.bannerContainer}
+              >
+                {banner}
+              </BpkTouchableOverlay>
         ) : banner}
-          {dismissable && (
-          <BpkTouchableOverlay
-            accessibilityComponentType="button"
-            onPress={onDismiss}
-            accessibilityLabel={dismissButtonLabel}
-            style={styles.closeButtonContainer}
-          >
-            <View>
-              <BpkIcon
-                style={[styles.button, styles.buttonClose]}
-                icon="close"
-                small
-              />
-            </View>
-          </BpkTouchableOverlay>
+            {dismissable && (
+              <BpkTouchableOverlay
+                accessibilityComponentType="button"
+                onPress={onDismiss}
+                accessibilityLabel={dismissButtonLabel}
+                style={styles.closeButtonContainer}
+              >
+                <View>
+                  <BpkIcon
+                    style={[styles.button, styles.buttonClose]}
+                    icon="close"
+                    small
+                  />
+                </View>
+              </BpkTouchableOverlay>
         )}
+          </View>
+          <BpkAnimateHeight expanded={expanded}>
+            <View style={expandedChildContainer}>{props.children}</View>
+          </BpkAnimateHeight>
         </View>
-        <BpkAnimateHeight expanded={expanded}>
-          <View style={expandedChildContainer}>{props.children}</View>
-        </BpkAnimateHeight>
       </View>
     </AnimateAndFade>
   );

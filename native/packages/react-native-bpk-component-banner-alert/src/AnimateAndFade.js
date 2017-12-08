@@ -25,8 +25,8 @@ import PropTypes from 'prop-types';
 import BpkAnimateHeight from 'react-native-bpk-component-animate-height';
 import { animationDurationSm } from 'bpk-tokens/tokens/base.react.native';
 
-const FADE_DURATION = animationDurationSm;
-const ANIMATE_HEIGHT_DURATION = animationDurationSm;
+const FADE_DURATION = animationDurationSm * 10;
+const ANIMATE_HEIGHT_DURATION = animationDurationSm * 10;
 
 class AnimateAndFade extends Component {
   constructor(props) {
@@ -66,7 +66,7 @@ class AnimateAndFade extends Component {
 
     return (
       <BpkAnimateHeight
-        duration={ANIMATE_HEIGHT_DURATION}
+        animationDuration={ANIMATE_HEIGHT_DURATION}
         expanded={this.state.visible}
         collapseDelay={FADE_DURATION}
         onAnimationComplete={this.onHeightAnimationComplete}

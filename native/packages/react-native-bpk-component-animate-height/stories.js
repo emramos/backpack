@@ -41,7 +41,9 @@ const styles = StyleSheet.create({
 });
 
 const animateHeightContent = (
-  <BpkText>
+  <BpkText
+    style={{ marginBottom: spacingBase }}
+  >
     Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
     commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus
     et magnis dis parturient montes, nascetur ridiculus mus.
@@ -71,7 +73,6 @@ class AnimateHeightDemo extends React.Component {
           expandDelay={this.props.expandDelay}
           collapseDelay={this.props.collapseDelay}
           animationDuration={this.props.animationDuration}
-          style={{ marginBottom: spacingBase }}
         >
           {this.props.children}
         </BpkAnimateHeight>
