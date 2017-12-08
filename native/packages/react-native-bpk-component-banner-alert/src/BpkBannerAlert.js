@@ -210,7 +210,6 @@ const BpkBannerAlert = (props) => {
       animateOnEnter={animateOnEnter}
       animateOnLeave={dismissable || animateOnLeave}
       show={show}
-      {...rest}
     >
       <View
         style={bannerStyle}
@@ -268,6 +267,7 @@ BpkBannerAlert.propTypes = {
   onDismiss: PropTypes.func,
   dismissButtonLabel: PropTypes.string,
   toggleExpandedButtonLabel: PropTypes.string,
+  style: PropTypes.object, //eslint-disable-line
 };
 
 BpkBannerAlert.defaultProps = {
@@ -281,6 +281,7 @@ BpkBannerAlert.defaultProps = {
   onDismiss: null,
   dismissButtonLabel: null,
   toggleExpandedButtonLabel: null,
+  style: null,
 };
 
 export default BpkBannerAlert;
