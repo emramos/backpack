@@ -61,7 +61,7 @@ class BpkBannerDismissable extends Component {
 
     return (
       <BpkBannerAlert
-        className={componentClassName}
+        bannerClassName={componentClassName}
         message={message}
         type={type}
         dismissable
@@ -85,6 +85,81 @@ BpkBannerDismissable.defaultProps = {
 };
 
 // eslint-disable-next-line react/no-multi-comp
+class BpkBannerAlertDismissDemo extends Component {
+  constructor() {
+    super();
+
+    this.newBannerAlerts = [
+      {
+        show: true,
+        message: 'Neutral alert with dismiss option.',
+        type: ALERT_TYPES.NEUTRAL,
+      },
+      {
+        show: true,
+        message: 'Successful alert with dismiss option.',
+        type: ALERT_TYPES.SUCCESS,
+      },
+      {
+        show: true,
+        message: 'Warn alert with dismiss option.',
+        type: ALERT_TYPES.WARN,
+      },
+      {
+        show: true,
+        message: 'Error alert with dismiss option.',
+        type: ALERT_TYPES.ERROR,
+      },
+    ];
+
+    this.reset = this.reset.bind(this);
+    this.setDismissed = this.setDismissed.bind(this);
+
+    this.state = {
+      bannerAlerts: JSON.parse(JSON.stringify(this.newBannerAlerts)),
+    };
+  }
+
+  setDismissed(index) {
+    const updatedBannerAlerts = JSON.parse(JSON.stringify(this.state.bannerAlerts));
+    updatedBannerAlerts[index].show = false;
+    this.setState({
+      bannerAlerts: updatedBannerAlerts,
+    });
+  }
+
+  reset() {
+    this.setState({
+      bannerAlerts: JSON.parse(JSON.stringify(this.newBannerAlerts)),
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <BpkButton
+          onClick={this.reset}
+        >
+          Reset
+        </BpkButton>
+        {this.state.bannerAlerts.map((b, i) => (
+          <BpkBannerAlert
+            bannerClassName={componentClassName}
+            dismissable
+            dismissButtonLabel="Dismiss"
+            key={i.toString()}
+            message={b.message}
+            onDismiss={() => this.setDismissed(i)}
+            show={b.show}
+            type={b.type}
+          />
+        ))}
+      </div>
+    );
+  }
+}
+
+// eslint-disable-next-line react/no-multi-comp
 class BpkBannerAlertFadeDemo extends Component {
   constructor() {
     super();
@@ -106,14 +181,13 @@ class BpkBannerAlertFadeDemo extends Component {
     return (
       <div>
         <BpkButton
-          className={componentClassName}
           onClick={this.addBannerAlert}
         >
             Add banner alert!
         </BpkButton>
         {[...Array(this.state.bannerAlertCount)].map((e, i) => (
           <BpkBannerDismissable
-            className={componentClassName}
+            bannerClassName={componentClassName}
             key={i.toString()}
             message={this.props.message}
             type={this.props.type}
@@ -222,21 +296,9 @@ const components = [
       </Paragraph>,
     ],
     examples: [
-      <BpkBannerDismissable
+      <BpkBannerAlertDismissDemo
         message="Neutral alert with dismiss option."
         type={ALERT_TYPES.NEUTRAL}
-      />,
-      <BpkBannerDismissable
-        message="Successful alert with dismiss option."
-        type={ALERT_TYPES.SUCCESS}
-      />,
-      <BpkBannerDismissable
-        message="Warn alert with dismiss option."
-        type={ALERT_TYPES.WARN}
-      />,
-      <BpkBannerDismissable
-        message="Error alert with dismiss option."
-        type={ALERT_TYPES.ERROR}
       />,
     ],
   },
@@ -250,7 +312,7 @@ const components = [
     ],
     examples: [
       <BpkBannerAlertFadeDemo
-        className={componentClassName}
+        bannerClassName={componentClassName}
         message="Neutral alert with dismiss option."
         type={ALERT_TYPES.NEUTRAL}
         dismissable

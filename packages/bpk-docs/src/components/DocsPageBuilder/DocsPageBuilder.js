@@ -113,7 +113,7 @@ const DocsPageBuilder = props => (
     <Heading level="h1">{props.title}</Heading>
     {flatten(toNodes(props.blurb))}
     {props.showMenu && (
-      <BpkList>{flatten([...props.components, ...props.customSections].map(ExampleNavListItem))}</BpkList>
+    <BpkList>{flatten([...props.components, ...props.customSections].map(ExampleNavListItem))}</BpkList>
     )}
     {props.tokenMap ? <TokenSwitcher tokens={props.tokenMap} /> : null}
     {flatten(props.components.map(ComponentExample))}
