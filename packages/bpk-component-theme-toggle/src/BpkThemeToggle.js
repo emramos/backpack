@@ -20,7 +20,7 @@ import React from 'react';
 import { BpkButtonLink } from 'bpk-component-link';
 
 import { getHtmlElement, THEME_CHANGE_EVENT } from './utils';
-import bpkCustomTheme from './theming';
+import bpkCustomTheme from './christmas_theming';
 
 const setTheme = (theme) => {
   const htmlElement = getHtmlElement();
@@ -54,7 +54,7 @@ class BpkThemeToggle extends React.Component {
   switchTheme(e) {
     e.preventDefault();
 
-    const theme = !this.state.enableCustomTheme ? bpkCustomTheme : null;
+    const theme = !this.state.enableCustomTheme ? null : bpkCustomTheme;
     setTheme(theme);
 
     this.setState({ enableCustomTheme: !this.state.enableCustomTheme });

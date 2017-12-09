@@ -20,6 +20,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Helmet from 'react-helmet';
 import { PropTypes as RouterPropTypes } from 'react-router';
+import Snowfetti from 'react-snowfetti';
 
 import BpkButton from 'bpk-component-button';
 import { colorWhite } from 'bpk-tokens/tokens/base.es6';
@@ -52,6 +53,17 @@ class HomePage extends React.Component {
   render() {
     return (
       <section>
+        <Snowfetti
+          profile={['snow', 'slow']}
+          amount={800}
+          width={600}
+          height={300}
+          styles={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+            }}
+        />
         <Helmet title="Backpack" />
         <div className={getClassName('bpkdocs-home-page__hero')}>
           <BpkGridContainer>

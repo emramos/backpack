@@ -81,5 +81,8 @@
     "react-native-bpk-component-text": "^2.1.23",
     "react-native-bpk-theming": "^1.0.20",
     "uglify-loader": "^1.4.0"
+  },
+  "dependencies": {
+    "react-snowfetti": "^1.2.4"
   }
 }

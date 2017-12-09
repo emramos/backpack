@@ -24,7 +24,7 @@ import PropTypes from 'prop-types';
 import React, { Children } from 'react';
 import { BpkList, BpkListItem } from 'bpk-component-list';
 import BpkContentContainer from 'bpk-component-content-container';
-
+import Snowfetti from 'react-snowfetti';
 import TokenSwitcher from './TokenSwitcher';
 import Heading from './../../components/Heading';
 import Paragraph from './../../components/Paragraph';
@@ -113,7 +113,7 @@ const DocsPageBuilder = props => (
     <Heading level="h1">{props.title}</Heading>
     {flatten(toNodes(props.blurb))}
     {props.showMenu && (
-      <BpkList>{flatten([...props.components, ...props.customSections].map(ExampleNavListItem))}</BpkList>
+    <BpkList>{flatten([...props.components, ...props.customSections].map(ExampleNavListItem))}</BpkList>
     )}
     {props.tokenMap ? <TokenSwitcher tokens={props.tokenMap} /> : null}
     {flatten(props.components.map(ComponentExample))}
