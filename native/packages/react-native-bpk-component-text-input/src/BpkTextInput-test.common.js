@@ -100,12 +100,12 @@ const commonTests = () => {
       expect(testRenderer.toJSON()).toMatchSnapshot();
     });
 
-    it('should render correctly with disabled', () => {
+    it('should render correctly with editable=false', () => {
       const testRenderer = TestRenderer.create(
         <BpkTextInput
           label="Name"
           value=""
-          disabled
+          editable={false}
         />,
       );
 

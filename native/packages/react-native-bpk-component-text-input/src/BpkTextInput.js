@@ -18,34 +18,18 @@
 
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import BpkIcon from 'react-native-bpk-component-icon';
-import BpkTouchableOverlay from 'react-native-bpk-component-touchable-overlay';
 import {
-  spacingSm,
-
-  colorRed500,
-  colorBlue500,
-  colorGreen500,
-  colorGray100,
-  colorGray300,
-  colorGray500,
-  colorGray700,
-
-  fontFamily,
-
-  textSmFontSize,
-  textSmFontWeight,
-  textSmLineHeight,
-
-  textBaseFontSize,
-  textBaseFontWeight,
-  textBaseLineHeight,
-
-  borderSizeSm,
-
-  animationDurationSm,
-} from 'bpk-tokens/tokens/base.react.native';
-import { View, TextInput, Animated, ViewPropTypes, Platform } from 'react-native';
+  Animated,
+  Platform,
+  TextInput,
+  View,
+  ViewPropTypes,
+} from 'react-native';
+import BpkTouchableOverlay from 'react-native-bpk-component-touchable-overlay';
+import BpkText from 'react-native-bpk-component-text';
+import { animationDurationSm } from 'bpk-tokens/tokens/base.react.native';
+import { ValidIcon, InvalidIcon, ClearIcon } from './BpkTextInputIcons';
+import { getLabelStyle, getInputContainerStyle, styles } from './BpkTextInputStyles';
 
 class BpkTextInput extends Component {
   constructor(props) {
@@ -56,8 +40,8 @@ class BpkTextInput extends Component {
     };
 
     this.animatedValues = {
-      isFocused: new Animated.Value(this.isFocusedAnimatedValue()),
-      labelPosition: new Animated.Value(this.labelPositionAnimatedValue()),
+      color: new Animated.Value(this.getColorAnimatedValue()),
+      labelPosition: new Animated.Value(this.getLabelPositionAnimatedValue()),
     };
 
     this.onClearText = this.onClearText.bind(this);
@@ -65,12 +49,12 @@ class BpkTextInput extends Component {
 
   componentDidUpdate() {
     Animated.parallel([
-      Animated.timing(this.animatedValues.isFocused, {
-        toValue: this.isFocusedAnimatedValue(),
+      Animated.timing(this.animatedValues.color, {
+        toValue: this.getColorAnimatedValue(),
         duration: animationDurationSm,
       }),
       Animated.timing(this.animatedValues.labelPosition, {
-        toValue: this.labelPositionAnimatedValue(),
+        toValue: this.getLabelPositionAnimatedValue(),
         duration: animationDurationSm,
       }),
     ]).start();
@@ -78,154 +62,69 @@ class BpkTextInput extends Component {
 
   onClearText() {
     this.inputRef.setNativeProps({ text: '' });
-
     if (this.props.onChangeText) {
       this.props.onChangeText('');
     }
   }
 
-  isFocusedAnimatedValue() {
+  getColorAnimatedValue() {
     return this.state.isFocused ? 1 : 0;
   }
 
-  labelPositionAnimatedValue() {
-    const { isFocused } = this.state;
-    const { value } = this.props;
-
-    return value || isFocused ? 0 : 1;
-  }
-
-  labelColorValue() {
-    const { value, valid, disabled } = this.props;
-
-    if (disabled) { return colorGray100; }
-    if (!value) { return colorGray300; }
-
-    return valid === false ? colorRed500 : colorGray500;
-  }
-
-  underlineColorValue() {
-    return this.props.valid === false ? colorRed500 : colorGray100;
+  getLabelPositionAnimatedValue() {
+    return (this.props.value || this.state.isFocused) ? 0 : 1;
   }
 
   render() {
     const { isFocused } = this.state;
     const {
+      validationMessage,
+      editable,
       label,
       value,
       style: userStyle,
-      disabled,
-      editable,
       valid,
       onFocus,
       onBlur,
       ...rest
     } = this.props;
 
+    const validityIcon = valid ? <ValidIcon /> : (valid === false && <InvalidIcon />);
+    const clearButton = (
+      <BpkTouchableOverlay onPress={this.onClearText} borderRadius="pill">
+        <ClearIcon />
+      </BpkTouchableOverlay>
+    );
+
+    const animatedLabelStyle = getLabelStyle(
+      this.animatedValues.color,
+      this.animatedValues.labelPosition,
+      { value, valid, editable },
+    );
+
+    const animatedInputStyle = getInputContainerStyle(this.animatedValues.color, valid);
+
     return (
-      <View
-        style={[
-          {
-            paddingTop: textSmLineHeight,
-          },
-          userStyle,
-        ]}
-      >
-        <Animated.Text
-          style={{
-            position: 'absolute',
-            fontFamily,
-            color: this.animatedValues.isFocused.interpolate({
-              inputRange: [0, 1],
-              outputRange: [this.labelColorValue(), colorBlue500],
-            }),
-            top: this.animatedValues.labelPosition.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, textSmLineHeight + (spacingSm - borderSizeSm)],
-            }),
-            fontSize: this.animatedValues.labelPosition.interpolate({
-              inputRange: [0, 1],
-              outputRange: [textSmFontSize, textBaseFontSize],
-            }),
-            lineHeight: this.animatedValues.labelPosition.interpolate({
-              inputRange: [0, 1],
-              outputRange: [textSmLineHeight, textBaseLineHeight],
-            }),
-            fontWeight: this.animatedValues.labelPosition.interpolate({
-              inputRange: [0, 1],
-              outputRange: [textSmFontWeight, textBaseFontWeight],
-            }),
-          }}
-        >
-          {label}
-        </Animated.Text>
-        <Animated.View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            borderBottomWidth: borderSizeSm,
-            borderBottomColor: this.animatedValues.isFocused.interpolate({
-              inputRange: [0, 1],
-              outputRange: [this.underlineColorValue(), colorBlue500],
-            }),
-          }}
-        >
+      <View style={[styles.container, userStyle]}>
+        <Animated.Text style={animatedLabelStyle}>{label}</Animated.Text>
+        <Animated.View style={animatedInputStyle}>
           <TextInput
+            editable={editable}
             value={value || ''}
-            style={{
-              flex: 1,
-              paddingTop: spacingSm,
-              paddingRight: 0,
-              paddingBottom: spacingSm,
-              paddingLeft: 0,
-              minHeight: textBaseLineHeight + (spacingSm * 2),
-              fontSize: textBaseFontSize,
-              fontWeight: textBaseFontWeight,
-              lineHeight: textBaseLineHeight,
-              color: colorGray700,
-              borderBottomWidth: 0,
-            }}
+            style={styles.input}
             onFocus={() => this.setState(() => ({ isFocused: true }), onFocus)}
             onBlur={() => this.setState(() => ({ isFocused: false }), onBlur)}
-            editable={!disabled && editable}
             ref={(ref) => { this.inputRef = ref; }}
             underlineColorAndroid="transparent"
             {...rest}
           />
-          {Platform.OS === 'ios' && isFocused ? (
-            <BpkTouchableOverlay
-              onPress={this.onClearText}
-            >
-              <BpkIcon
-                icon="close-circle"
-                small
-                style={{
-                  color: colorGray300,
-                }}
-              />
-            </BpkTouchableOverlay>
-          ) : (
-            valid ? (
-              <BpkIcon
-                icon="tick"
-                small
-                style={{
-                  color: colorGreen500,
-                }}
-              />
-            ) : (
-              valid === false && (
-                <BpkIcon
-                  icon="exclamation-circle"
-                  small
-                  style={{
-                    color: colorRed500,
-                  }}
-                />
-              )
-            )
-          )}
+          {Platform.OS === 'ios' && isFocused && value.length > 0 ? clearButton : validityIcon}
         </Animated.View>
+        { valid === false && (
+          <BpkText textStyle="xs" style={styles.validationMessage}>
+            {validationMessage}
+          </BpkText>
+        )}
       </View>
     );
   }
@@ -234,8 +133,8 @@ class BpkTextInput extends Component {
 BpkTextInput.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  validationMessage: PropTypes.string,
   valid: PropTypes.bool,
-  disabled: PropTypes.bool,
   editable: PropTypes.bool,
   style: ViewPropTypes.style,
   onFocus: PropTypes.func,
@@ -244,8 +143,8 @@ BpkTextInput.propTypes = {
 };
 
 BpkTextInput.defaultProps = {
+  validationMessage: null,
   valid: null,
-  disabled: false,
   editable: true,
   style: null,
   onFocus: null,

@@ -46,7 +46,7 @@ storiesOf('BpkTextInput', module)
       />
       <StatefulBpkTextInput
         label="Input with multiline value"
-        initialValue="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+        initialValue="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus." // eslint-disable-line max-len
         multiline
         style={styles.input}
       />
@@ -64,9 +64,9 @@ storiesOf('BpkTextInput', module)
         style={styles.input}
       />
       <StatefulBpkTextInput
-        label="Disabled input"
+        label="Non-editable input"
         initialValue=""
-        disabled
+        editable={false}
         style={styles.input}
       />
       <StatefulBpkTextInput
