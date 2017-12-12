@@ -78,6 +78,7 @@ class BpkTextInput extends Component {
   render() {
     const { isFocused } = this.state;
     const {
+      inputRef,
       validationMessage,
       editable,
       label,
@@ -114,13 +115,13 @@ class BpkTextInput extends Component {
             style={styles.input}
             onFocus={() => this.setState(() => ({ isFocused: true }), onFocus)}
             onBlur={() => this.setState(() => ({ isFocused: false }), onBlur)}
-            ref={(ref) => { this.inputRef = ref; }}
+            ref={(ref) => { this.inputRef = ref; if (inputRef) { inputRef(ref); } }}
             underlineColorAndroid="transparent"
             {...rest}
           />
           {Platform.OS === 'ios' && isFocused && value.length > 0 ? clearButton : validityIcon}
         </Animated.View>
-        { valid === false && (
+        { valid === false && validationMessage && (
           <BpkText textStyle="xs" style={styles.validationMessage}>
             {validationMessage}
           </BpkText>
@@ -133,6 +134,7 @@ class BpkTextInput extends Component {
 BpkTextInput.propTypes = {
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
+  inputRef: PropTypes.func,
   validationMessage: PropTypes.string,
   valid: PropTypes.bool,
   editable: PropTypes.bool,
@@ -143,6 +145,7 @@ BpkTextInput.propTypes = {
 };
 
 BpkTextInput.defaultProps = {
+  inputRef: null,
   validationMessage: null,
   valid: null,
   editable: true,

@@ -18,7 +18,7 @@
 
 import React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import BpkTextInput from './BpkTextInput';
 
@@ -100,12 +100,38 @@ const commonTests = () => {
       expect(testRenderer.toJSON()).toMatchSnapshot();
     });
 
+    it('should render correctly with valid false and a validation message', () => {
+      const testRenderer = TestRenderer.create(
+        <BpkTextInput
+          label="Name"
+          value=""
+          valid={false}
+          validationMessage="Nope"
+        />,
+      );
+
+      expect(testRenderer.toJSON()).toMatchSnapshot();
+    });
+
     it('should render correctly with editable=false', () => {
       const testRenderer = TestRenderer.create(
         <BpkTextInput
           label="Name"
           value=""
           editable={false}
+        />,
+      );
+
+      expect(testRenderer.toJSON()).toMatchSnapshot();
+    });
+
+    it('should render correctly with inputRef set', () => {
+      let inputRef = null; // eslint-disable-line no-unused-vars
+      const testRenderer = TestRenderer.create(
+        <BpkTextInput
+          label="Name"
+          value=""
+          inputRef={(ref) => { inputRef = ref; }}
         />,
       );
 
